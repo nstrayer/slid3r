@@ -1,14 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["slid3r"] = factory();
-	else
-		root["slid3r"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+global["slid3r"] =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -281,4 +272,3 @@ var handleStyle = exports.handleStyle = function handleStyle(selection) {
 
 /***/ })
 /******/ ]);
-});

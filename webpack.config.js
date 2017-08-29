@@ -2,7 +2,7 @@ module.exports = {
   entry: './src/slid3r.js',
   output: {
     library: 'slid3r',
-    libraryTarget: 'umd',
+    libraryTarget: 'global',
     filename: 'dist/slid3r.js',
   },
   module: {
