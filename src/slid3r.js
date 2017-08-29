@@ -2,7 +2,7 @@ import {roundEndsStyle, trackStyle, trackInsetStyle, trackOverlayStyle, handleSt
 
 // The function onDrag gets constantly fed slider position
 // onDone gets it only after the user has stopped sliding.
-export default function slid3r() {
+function slid3r() {
   
   // Defaults
   let sliderRange = [0,10],
@@ -173,3 +173,5 @@ export default function slid3r() {
   return drawSlider;
 
 }
+
+module.exports = slid3r;
