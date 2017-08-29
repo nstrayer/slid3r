@@ -86,13 +86,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-exports.slider = slider;
+exports.default = slid3r;
 
 var _styles = __webpack_require__(1);
 
 // The function onDrag gets constantly fed slider position
 // onDone gets it only after the user has stopped sliding.
-function slider() {
+function slid3r() {
 
   // Defaults
   var sliderRange = [0, 10],
@@ -127,11 +127,17 @@ function slider() {
 
       var slider = sel.attr("class", "slider").attr("transform", 'translate( ' + xPos + ', ' + yPos + ')');
 
-      slider.append("line").attr("class", "track").st(Object.assign({}, _styles.roundEnds, _styles.track)).at({ x1: xScale.range()[0], x2: xScale.range()[1] }).select(function () {
+      var track = slider.append("line").attr("class", "track").attr('x1', xScale.range()[0]).attr('x2', xScale.range()[1]);
+
+      var trackInset = track.select(function () {
         return this.parentNode.appendChild(this.cloneNode(true));
-      }).attr("class", "track-inset").st(Object.assign({}, _styles.roundEnds, _styles.trackInset)).select(function () {
+      }).attr("class", "track-inset");
+
+      var trackOverlay = trackInset.select(function () {
         return this.parentNode.appendChild(this.cloneNode(true));
-      }).attr("class", "track-overlay").st(Object.assign({}, _styles.roundEnds, _styles.trackOverlay)).call(d3.drag().on("start.interrupt", function () {
+      }).attr("class", "track-overlay");
+
+      trackOverlay.call(d3.drag().on("start.interrupt", function () {
         slider.interrupt();
       }).on("start drag", dragBehavior).on("end", finishBehavior));
 
@@ -139,14 +145,21 @@ function slider() {
         return d;
       });
 
-      var handle = slider.insert("circle", ".track-overlay").attr("class", "handle").st(_styles.handleStyle).attr("r", 9).attr("cx", xScale(startPos));
+      var handle = slider.insert("circle", ".track-overlay").attr("class", "handle").attr("r", 9).attr("cx", xScale(startPos));
 
       // write the label
-      slider.append('text').at({
-        y: -14,
-        fontFamily: font
-      }).text(label);
+      slider.append('text').attr('y', -14).attr('font-family', font).text(label);
 
+      // apply styles to everything.
+      (0, _styles.roundEndsStyle)(track);
+      (0, _styles.trackStyle)(track);
+      (0, _styles.handleStyle)(handle);
+      (0, _styles.roundEndsStyle)(trackOverlay);
+      (0, _styles.trackOverlayStyle)(trackOverlay);
+      (0, _styles.roundEndsStyle)(trackInset);
+      (0, _styles.trackInsetStyle)(trackInset);
+
+      // setup callbacks
       function dragBehavior() {
         var scaledPos = getValue(d3.event.x);
         // by inverting and reverting the position we assert bounds on the slider.
@@ -167,7 +180,6 @@ function slider() {
 
   drawSlider.range = function (range) {
     if (!arguments.length) return sliderRange;
-    console.log('setting slider range to', range);
     sliderRange = range;
     return drawSlider;
   };
@@ -242,38 +254,29 @@ function slider() {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 // styles for the d3 slider
 
 // styles
-var roundEnds = exports.roundEnds = {
-    strokeLinecap: 'round'
+var roundEndsStyle = exports.roundEndsStyle = function roundEndsStyle(selection) {
+  return selection.style('stroke-linecap', 'round');
 };
 
-var track = exports.track = {
-    stroke: '#000',
-    strokeOpacity: 0.3,
-    strokeWidth: '10px'
+var trackStyle = exports.trackStyle = function trackStyle(selection) {
+  return selection.style('stroke', '#000').style('stroke-opacity', '0.3').style('strokeWidth', '10px');
 };
 
-var trackInset = exports.trackInset = {
-    stroke: '#ddd',
-    strokeWidth: 8
+var trackInsetStyle = exports.trackInsetStyle = function trackInsetStyle(selection) {
+  return selection.style('stroke', '#ddd').style('stroke-width', 8);
 };
 
-var trackOverlay = exports.trackOverlay = {
-    pointerEvents: 'stroke',
-    strokeWidth: 50,
-    stroke: 'transparent',
-    cursor: 'crosshair'
+var trackOverlayStyle = exports.trackOverlayStyle = function trackOverlayStyle(selection) {
+  return selection.style('pointer-events', 'stroke').style('stroke-width', 50).style('stroke', 'transparent').style('cursor', 'crosshair');
 };
 
-var handleStyle = exports.handleStyle = {
-    fill: '#fff',
-    stroke: ' #000',
-    strokeOpacity: 0.5,
-    strokeWidth: '1.25px'
+var handleStyle = exports.handleStyle = function handleStyle(selection) {
+  return selection.style('fill', '#fff').style('stroke', '#000').style('stroke-opacity', 0.5).style('strokeWidth', '1.25px');
 };
 
 /***/ })
