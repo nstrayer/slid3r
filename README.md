@@ -1,17 +1,17 @@
 # slid3r
-A simple d3 slider that is meant to be placed inside your svg. 
+A simple d3 slider that is meant to be placed inside your svg.
 
 ## What and Why
 `slid3r` is a tiny little library that uses d3 to make easy to user sliders. I constantly find myself wanting to implement sliders in
-my projects but find that the default html ones are ugly, or if I use some of the better alternatives I have to load Jquery or something 
-else to my project. Other [d3-based slider](http://sujeetsr.github.io/d3.slider/) efforts require the slider to be container in a div, which I find isn't always what I need. 
+my projects but find that the default html ones are ugly, or if I use some of the better alternatives I have to load JQuery or something
+else and bog-down my project. Other [d3-based slider](http://sujeetsr.github.io/d3.slider/) efforts require the slider to be contained in a div, which I find isn't always what I want/need.
 A benefit of having the controls straight in the svg is the ability to move the slider around the vis programatically using `.attr('transform',...)`.
-This is especially useful when you have more complex visualizations with dynamic interfaces. 
+This is especially useful when you have more complex visualizations with dynamic interfaces.
 
 ## API
 
 Currently you get one single function. That function is `slider()`. Attached to this function is a few getter-setter functions as described in Mike Bostock's [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
-article. An example use of the function is as follows: 
+article. An example use of the function is as follows:
 
 ```js
 const mySlider = slider()
