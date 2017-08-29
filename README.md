@@ -27,6 +27,12 @@ const mySlider = slider()
  svg.append('g').call(mySlider);
 ```
 
+__Result:__
+
+![](images/simpleDemo.png)
+
+---
+
 All current options are as follows:
 
 | name      | purpose |     arguments | default |
