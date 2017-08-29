@@ -1,4 +1,4 @@
-global["slid3r"] =
+var slid3r =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
