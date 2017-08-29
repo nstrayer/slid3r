@@ -1,31 +1,25 @@
 // styles for the d3 slider
 
 // styles
-export const roundEnds = {
-    strokeLinecap: 'round'
-  };
+export const roundEndsStyle = (selection) => selection.style('stroke-linecap', 'round');
   
-export const track = {
-    stroke: '#000',
-    strokeOpacity: 0.3,
-    strokeWidth: '10px',
-  };
+export const trackStyle = (selection) => selection
+  .style('stroke', '#000')
+  .style('stroke-opacity', '0.3')
+  .style('strokeWidth', '10px');
+
+export const trackInsetStyle = (selection) => selection
+  .style('stroke', '#ddd')
+  .style('stroke-width', 8);
+
+export const trackOverlayStyle = (selection) => selection
+  .style('pointer-events', 'stroke')
+  .style('stroke-width', 50)
+  .style('stroke', 'transparent')
+  .style('cursor', 'crosshair');
   
-export const trackInset = {
-    stroke: '#ddd',
-    strokeWidth: 8,
-  };
-  
-export const trackOverlay = {
-    pointerEvents: 'stroke',
-    strokeWidth: 50,
-    stroke: 'transparent',
-    cursor: 'crosshair',
-  }
-  
-export const handleStyle = {
-    fill: '#fff',
-    stroke:' #000',
-    strokeOpacity: 0.5,
-    strokeWidth: '1.25px',
-  }
+export const handleStyle = (selection) => selection
+  .style('fill', '#fff')
+  .style('stroke', '#000')
+  .style('stroke-opacity', 0.5)
+  .style('strokeWidth', '1.25px');

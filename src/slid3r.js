@@ -1,8 +1,8 @@
-import {roundEnds, track, trackInset, trackOverlay, handleStyle} from './styles.js';
+import {roundEndsStyle, trackStyle, trackInsetStyle, trackOverlayStyle, handleStyle} from './styles.js';
 
 // The function onDrag gets constantly fed slider position
 // onDone gets it only after the user has stopped sliding.
-export function slider() {
+export default function slid3r() {
   
   // Defaults
   let sliderRange = [0,10],
@@ -25,7 +25,7 @@ export function slider() {
     selection.each(function(d, i) {
       const sel = d3.select(this);
       
-       const xScale = d3.scaleLinear()
+      const xScale = d3.scaleLinear()
         .domain(sliderRange)
         .range([0, sliderWidth])
         .clamp(true);
@@ -36,16 +36,20 @@ export function slider() {
         .attr("class", "slider")
         .attr("transform", `translate( ${xPos}, ${yPos})`);
       
-      slider.append("line")
+      const track = slider.append("line")
           .attr("class", "track")
-          .st(Object.assign({}, roundEnds, track))
-          .at({ x1: xScale.range()[0], x2: xScale.range()[1] })
-        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+          .attr('x1',xScale.range()[0])
+          .attr('x2', xScale.range()[1])
+         
+      const trackInset = track.select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
           .attr("class", "track-inset")
-          .st(Object.assign({},roundEnds, trackInset))
+      
+      
+      const trackOverlay = trackInset
         .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
           .attr("class", "track-overlay")
-          .st(Object.assign({}, roundEnds, trackOverlay))
+
+      trackOverlay
           .call(
             d3.drag()
               .on("start.interrupt", function() { slider.interrupt(); })
@@ -66,19 +70,26 @@ export function slider() {
       
       const handle = slider.insert("circle", ".track-overlay")
           .attr("class", "handle")
-          .st(handleStyle)
           .attr("r", 9)
           .attr("cx", xScale(startPos));
-      
-      
+          
+
       // write the label
       slider.append('text')
-        .at({
-          y: -14,
-          fontFamily: font,
-        })
-        .text(label)
+        .attr('y', -14)
+        .attr('font-family', font)
+        .text(label);
           
+      // apply styles to everything.
+      roundEndsStyle(track);
+      trackStyle(track);
+      handleStyle(handle);
+      roundEndsStyle(trackOverlay);
+      trackOverlayStyle(trackOverlay);
+      roundEndsStyle(trackInset);
+      trackInsetStyle(trackInset);
+      
+      // setup callbacks
       function dragBehavior(){
         const scaledPos = getValue(d3.event.x);
         // by inverting and reverting the position we assert bounds on the slider.
@@ -101,7 +112,6 @@ export function slider() {
   
   drawSlider.range = function(range){
     if(!arguments.length) return sliderRange;
-    console.log('setting slider range to', range)
     sliderRange = range;
     return drawSlider;
   }
