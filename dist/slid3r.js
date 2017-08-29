@@ -1,4 +1,4 @@
-var slid3r =
+slid3r =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
