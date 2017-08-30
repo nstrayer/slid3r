@@ -16,7 +16,7 @@ Currently you get one single function. That function is `slider()`. Attached to 
 article. An example use of the function is as follows:
 
 ```js
-const mySlider = slider()
+const mySlider = slid3r()
     .width(200)
     .range([0,10])
     .startPos(3)
