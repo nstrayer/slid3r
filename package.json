@@ -1,6 +1,6 @@
 {
   "name": "slid3r",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A tiny slider library for making svg-based sliders in d3 visualizations",
   "main": "slider.js",
   "scripts": {
@@ -28,5 +28,8 @@
     "babel-preset-es2015": "^6.24.1",
     "jest": "^20.0.4",
     "webpack": "^3.5.5"
+  },
+  "dependencies": {
+    "d3": "4.11.0"
   }
 }
