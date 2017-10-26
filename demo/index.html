@@ -1,32 +1,53 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
   <title>Slid3r Demo</title>
 </head>
+
 <body>
-  <p>Current slider value is <span id = "sliderValue">3</span></p>
-  <p>Slider last dropped on <span id = "sliderEndValue">3</span></p>
+  <p>Current slider value is
+    <span id="sliderValue">3</span>
+  </p>
+  <p>Slider last dropped on
+    <span id="sliderEndValue">3</span>
+  </p>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <!-- <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script> -->
   <script src="../dist/slid3r.js"></script>
-  <script type = 'module'>
-  
+  <script type='module'>
+
     const svg = d3.select('body').append('svg')
       .attr('height', 500)
       .attr('width', 500)
-      
-    const mySlider = slid3r()
-      .width(200)
-      .range([0,10])
-      .startPos(3)
-      .label('Super Cool Slider')
-      .loc([50, 50])
-      .onDrag((pos) => d3.select('#sliderValue').text(pos))
-      .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos));
-  
-    svg.append('g').call(mySlider);
-    
+
+    svg.append('g').call(
+      slid3r()
+        .width(200)
+        .range([0, 10])
+        .startPos(3)
+        .numTicks(10)
+        .label('Super Cool Slider')
+        .loc([50, 50])
+        .onDrag((pos) => d3.select('#sliderValue').text(pos))
+        .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos))
+    );
+
+    svg.append('g').call(
+      slid3r()
+        .width(30)
+        .range([0, 1])
+        .startPos(0)
+        .numTicks(2)
+        .customTicks(["off", "on"])
+        .label('A switch')
+        .loc([50, 150])
+        .onDrag((pos) => d3.select('#sliderValue').text(pos))
+        .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos))
+    );
+
   </script>
 </body>
+
 </html>

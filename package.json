@@ -1,6 +1,6 @@
 {
   "name": "slid3r",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A tiny slider library for making svg-based sliders in d3 visualizations",
   "main": "dist/slid3r.js",
   "scripts": {

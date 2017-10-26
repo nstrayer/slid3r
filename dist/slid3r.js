@@ -95,7 +95,7 @@ var d3 = __webpack_require__(3);
 
 // Calculates the beta function between alpha and beta
 /**
- * @return {object} - A slider
+ * @return {object} - A slider object
  */
 function slid3r() {
   // Defaults
@@ -114,6 +114,7 @@ function slid3r() {
       intClamp = true,
       // clamp handle to nearest int?
   numTicks = 10,
+      tickLabels = null,
       font = "optima",
       vertical = false,
       transitionLength = 10;
@@ -124,7 +125,6 @@ function slid3r() {
    * @return {object} - A slider
    */
   function drawSlider(sel) {
-
     var trans = d3.transition("sliderTrans").duration(transitionLength);
 
     var xScale = d3.scaleLinear().domain(sliderRange).range([0, sliderWidth]).clamp(true);
@@ -149,12 +149,21 @@ function slid3r() {
       slider.interrupt();
     }).on("start drag", dragBehavior).on("end", finishBehavior));
 
-    var handle = (0, _selectAppend2.default)(slider, "circle", ".handle").style("pointer-events", "none").attr("class", "handle").attr("r", 9).attr("cx", xScale(startPos));
+    var handle = (0, _selectAppend2.default)(slider, "circle", ".handle").style("pointer-events", "none").attr("class", "handle").attr("r", 8).attr("cx", xScale(startPos));
 
     var tickFormat = xScale.tickFormat(5, intClamp ? ",.0f" : "f");
 
-    (0, _selectAppend2.default)(slider, "g", ".ticks").style("font", "10px " + font).attr("transform", "translate(0," + 18 + ")").selectAll("text").data(xScale.ticks(numTicks).map(tickFormat)).enter().append("text").attr("x", xScale).attr("text-anchor", "middle").text(function (d) {
-      return d;
+    var tickPositions = xScale.ticks(numTicks).map(tickFormat);
+    var tickData = tickLabels ? tickLabels.map(function (label, i) {
+      return { label: label, pos: tickPositions[i] };
+    }) : tickPositions.map(function (label) {
+      return { label: label, pos: label };
+    });
+
+    (0, _selectAppend2.default)(slider, "g", ".ticks").style("font", "10px " + font).attr("transform", "translate(0," + 18 + ")").selectAll("text").data(tickData).enter().append("text").attr("x", function (d) {
+      return xScale(d.pos);
+    }).attr("text-anchor", "middle").text(function (d) {
+      return d.label;
     });
 
     // write the label
@@ -257,6 +266,14 @@ function slid3r() {
   drawSlider.numTicks = function (num) {
     if (!arguments.length) return numTicks;
     numTicks = num;
+    return drawSlider;
+  };
+
+  drawSlider.customTicks = function (customLabels) {
+    if (!arguments.length) return tickLabels;
+    // check to make sure we have the same number of labels as ticks
+    if (customLabels.length !== numTicks) throw new Error("Make sure you're custom labels length matches the number of ticks required. (Default = 10)");
+    tickLabels = customLabels;
     return drawSlider;
   };
 
