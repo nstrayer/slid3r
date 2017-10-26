@@ -35,6 +35,7 @@ import slid3r from 'slid3r';
 const slid3r = require('slid3r');
 ```
 
+Again, make sure you also have `d3` imported before importing `slid3r`. By requiring `d3` be in the user's namespace already it avoids you having to have an entire extra copy of `d3` imported just for some tiny sliders. 
 
 ## Example Use
 
