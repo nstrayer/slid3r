@@ -43,6 +43,10 @@ Currently you get one single function. That function is `slider()`. Attached to 
 article. An example use of the function is as follows:
 
 ```js
+import slid3r from 'slid3r';
+
+// .... code to setup an svg element on the page using d3....
+
 svg.append('g').call(
       slid3r()
         .width(200)
