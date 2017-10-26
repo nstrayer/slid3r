@@ -28,15 +28,30 @@ Currently you get one single function. That function is `slider()`. Attached to 
 article. An example use of the function is as follows:
 
 ```js
-const mySlider = slid3r()
-    .width(200)
-    .range([0,10])
-    .startPos(3)
-    .label('Super Cool Slider')
-    .loc([50, 50])
-    .onDone(pos => console.log('slider set to', pos));
-  
- svg.append('g').call(mySlider);
+svg.append('g').call(
+      slid3r()
+        .width(200)
+        .range([0, 10])
+        .startPos(3)
+        .numTicks(10)
+        .label('Super Cool Slider')
+        .loc([50, 50])
+        .handleColor("orange")
+        .onDrag((pos) => d3.select('#sliderValue').text(pos))
+        .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos))
+    );
+
+svg.append('g').call(
+    slid3r()
+    .width(30)
+    .range([0, 1])
+    .startPos(0)
+    .customTicks([{pos: 0, label: 'off', color: 'blue'}, {pos: 1, label: 'on', color: 'red'}])
+    .label('A switch')
+    .loc([50, 150])
+    .onDrag((pos) => d3.select('#sliderValue').text(pos))
+    .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos))
+);
 ```
 
 __Result:__
