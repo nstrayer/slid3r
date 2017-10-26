@@ -54,7 +54,7 @@ All current options are as follows:
 | .startPos | Value that the slider starts at | _number_ (in set range) | `0` |
 | .numTicks | Number of ticks you desire (may not return exactly this number due to optimization algorithm) | _integer_  | `0` |
 | .handleColor | Color of the handle for slider | _string_  | `'white'` |
-| .customTicks | Either an array of numbers or an array of objects containing `pos`, `label`, `color` (optional) | _array_  | `d3.scale.ticks(numTicks)` |
+| .customTicks | Either an array of numerical tick positions or an array of objects containing `pos`: `<pos of tick>`, `label`: `<label for tick>`, `color`: `<color of handle when this is closest tick>` (optional) | _array_  | `d3.scale.ticks(numTicks)` |
 | .clamp    | Should slider report position rounded to nearest integer? | _boolean_ | `true` |
 | .width    | Width of slider  | _number_ (represents pixels) | `250` |
 | .loc      | Where the slider sits on the svg | _array_ (`[leftEdgeX, topEdgeY]`) | `[0,0]` |
