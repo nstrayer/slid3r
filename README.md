@@ -15,14 +15,28 @@ This is especially useful when you have more complex visualizations with dynamic
 [This bl.ock](https://bl.ocks.org/nstrayer/558a63263bd60b3a722c92a2fe338345) demonstrates the minimum viable product for using the library. In addition, [this blogpost](http://livefreeordichotomize.com/2017/08/14/the-exponential-power-series/) I wrote uses it in an intereactive.
 
 ## Getting it into your project
-Currently the library is bundled to be used in a script tag. If you want to use it just add 
+The library is bundled to be used in multiple ways. The easiest is just putting it in a script tag in your `html`. When doing this make sure you have d3 being imported somewhere above it. 
 ```
+<script src="d3.v4.js"></script>
 <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script>
 ```
 
-somewhere above the javascript you call `slid3r` in. 
+You can also grab it from 'npm' and use it in your favorite bundler such as webpack, browserify, or rollup. 
 
-## API
+```bash
+npm install --save slid3r
+```
+
+And then just import it like any other library. Note that it only exports a single function. 
+
+```js
+import slid3r from 'slid3r';
+// or
+const slid3r = require('slid3r');
+```
+
+
+## Example Use
 
 Currently you get one single function. That function is `slider()`. Attached to this function are a few getter-setter functions as described in Mike Bostock's [Towards Reusable Charts](https://bost.ocks.org/mike/chart/)
 article. An example use of the function is as follows:
@@ -59,6 +73,8 @@ __Result:__
 ![](https://photos-2.dropbox.com/t/2/AACb9lGUev7bpFb5AvAX-avlWl5ePBk5TDYoZjo9Q-4l9g/12/466452542/png/32x32/3/1509055200/0/2/Screenshot%202017-10-26%2012.02.27.png/ELaHk-MDGMaCEyAHKAc/m6vp6Mi8cMSKn6SO88JavJJw2WHrtEL4T10XvGimpjM?dl=0&size=1600x1200&size_mode=3)
 
 ---
+
+## API
 
 All current options are as follows:
 

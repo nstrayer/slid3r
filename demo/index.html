@@ -5,20 +5,35 @@
 <head>
   <title>Slid3r Demo</title>
 </head>
+<style>
 
+  #wrapper{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  span {
+    font-weight: bold;
+  }
+  svg {
+    border: 1px solid;
+  }
+</style>
 <body>
-  <p>Current slider value is
-    <span id="sliderValue">3</span>
-  </p>
-  <p>Slider last dropped on
-    <span id="sliderEndValue">3</span>
-  </p>
+  <div id = 'wrapper'>
+    <p>Current slider value is
+      <span id="sliderValue">3</span>
+    </p>
+    <p>Switch is set to 
+      <span id="switchValue">off</span>
+    </p>
+  </div>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <!-- <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script> -->
   <script src="../dist/slid3r.js"></script>
   <script type='module'>
 
-    const svg = d3.select('body').append('svg')
+    const svg = d3.select('#wrapper').append('svg')
       .attr('height', 500)
       .attr('width', 500)
 
@@ -43,8 +58,8 @@
         .customTicks([{pos: 0, label: 'off', color: 'blue'}, {pos: 1, label: 'on', color: 'red'}])
         .label('A switch')
         .loc([50, 150])
-        .onDrag((pos) => d3.select('#sliderValue').text(pos))
-        .onDone((pos) => d3.selectAll('#sliderValue,#sliderEndValue').text(pos))
+        // .onDrag((pos) => d3.select('#switchValue').text(pos))
+        .onDone((pos) => d3.selectAll('#switchValue').text(pos == 0 ? 'off': 'on'))
     );
 
     svg.append('g').call(
