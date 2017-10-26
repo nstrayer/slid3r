@@ -56,7 +56,7 @@ svg.append('g').call(
 
 __Result:__
 
-![](https://www.dropbox.com/s/5qp5872v7rra7y3/Screenshot%202017-10-26%2012.02.27.png?dl=0)
+![](https://photos-2.dropbox.com/t/2/AACb9lGUev7bpFb5AvAX-avlWl5ePBk5TDYoZjo9Q-4l9g/12/466452542/png/32x32/3/1509055200/0/2/Screenshot%202017-10-26%2012.02.27.png/ELaHk-MDGMaCEyAHKAc/m6vp6Mi8cMSKn6SO88JavJJw2WHrtEL4T10XvGimpjM?dl=0&size=1600x1200&size_mode=3)
 
 ---
 
