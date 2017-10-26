@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("d3"));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["d3"], factory);
 	else if(typeof exports === 'object')
-		exports["slid3r"] = factory();
+		exports["slid3r"] = factory(require("d3"));
 	else
-		root["slid3r"] = factory();
-})(this, function() {
+		root["slid3r"] = factory(root["d3"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -89,6 +89,9 @@ var _selectAppend2 = _interopRequireDefault(_selectAppend);
 var _styles = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var d3 = __webpack_require__(3);
+
 
 // Calculates the beta function between alpha and beta
 /**
@@ -326,6 +329,12 @@ var trackOverlayStyle = exports.trackOverlayStyle = function trackOverlayStyle(s
 var handleStyle = exports.handleStyle = function handleStyle(selection) {
   return selection.style('fill', '#fff').style('stroke', '#000').style('stroke-opacity', 0.5).style('strokeWidth', '1.25px');
 };
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ })
 /******/ ]);

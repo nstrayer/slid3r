@@ -1,3 +1,4 @@
+const d3 = require('d3');
 import selectAppend from "./selectAppend";
 
 import {

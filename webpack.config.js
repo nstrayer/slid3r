@@ -8,8 +8,9 @@ module.exports = {
   externals: {
     d3 : {
       commonjs: "d3",
+      commonjs2: "d3",
       amd: "d3",
-      root: "d3" // indicates global variable
+      root: "d3"  // indicates global variable
     }
   },
   // devtool: 'source-map',  
