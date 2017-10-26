@@ -2,9 +2,10 @@ module.exports = {
   entry: './src/slid3r.js',
   output: {
     library: 'slid3r',
-    libraryTarget: 'assign',
+    libraryTarget: 'umd',
     filename: 'dist/slid3r.js',
   },
+  // devtool: 'source-map',  
   module: {
     rules: [
       {
