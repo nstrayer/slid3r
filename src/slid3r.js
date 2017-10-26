@@ -1,5 +1,6 @@
 const d3 = require("d3");
 import selectAppend from "./selectAppend";
+import findClosestTickColor from "./findClosestTickColor";
 
 import {
   roundEndsStyle,
@@ -25,16 +26,17 @@ function slid3r() {
     yPos = 0.5,
     intClamp = true, // clamp handle to nearest int?
     numTicks = 10,
-    tickLabels = null,
+    customTicks = null,
     font = "optima",
+    handleColor = "white",
     vertical = false,
     transitionLength = 10;
 
   // Calculates the beta function between alpha and beta
   /**
-   * @param {object} sel - A selection from d3
-   * @return {object} - A slider
-   */
+     * @param {object} sel - A selection from d3
+     * @return {object} - A slider
+     */
   function drawSlider(sel) {
     const trans = d3.transition("sliderTrans").duration(transitionLength);
 
@@ -45,6 +47,21 @@ function slid3r() {
       .clamp(true);
 
     const getValue = eventX => xScale.invert(eventX);
+
+    // tick logic.
+    const tickFormat = xScale.tickFormat(5, intClamp ? ",.0f" : "f");
+    const tickPositions = xScale.ticks(numTicks).map(tickFormat);
+
+    // use user custom ticks info if provided, otherwise generate with d3.
+    // check if custom ticks are just an array or are the more complex object version
+    const customTickSimple = customTicks && typeof customTicks[0] !== "object";
+    const customColors = customTicks && customTicks[0].color;
+
+    const tickData = !customTicks
+      ? tickPositions.map(label => ({ label, pos: label, color: handleColor }))
+      : customTickSimple
+        ? customTicks.map(d => ({ label: d, pos: d, color: handleColor }))
+        : customTicks.map(d => Object.assign({ color: handleColor }, d));
 
     const slider = sel.attr("transform", `translate(${xPos}, ${yPos})`);
 
@@ -78,14 +95,11 @@ function slid3r() {
       .style("pointer-events", "none")
       .attr("class", "handle")
       .attr("r", 8)
+      .attr(
+        "fill",
+        customColors ? findClosestTickColor(tickData, startPos) : handleColor
+      )
       .attr("cx", xScale(startPos));
-
-    const tickFormat = xScale.tickFormat(5, intClamp ? ",.0f" : "f");
-
-    const tickPositions = xScale.ticks(numTicks).map(tickFormat);
-    const tickData = tickLabels
-      ? tickLabels.map((label, i) => ({ label, pos: tickPositions[i] }))
-      : tickPositions.map(label => ({ label, pos: label }));
 
     selectAppend(slider, "g", ".ticks")
       .style("font", `10px ${font}`)
@@ -132,7 +146,11 @@ function slid3r() {
     function finishBehavior() {
       const dragPos = getValue(d3.event.x);
       const finalPos = intClamp ? Math.round(dragPos) : dragPos;
-      handle.transition(trans).attr("cx", xScale(finalPos));
+      const closestTickColor = findClosestTickColor(tickData, finalPos);
+      handle
+        .transition(trans)
+        .attr("cx", xScale(finalPos))
+        .attr("fill", closestTickColor);
       onDone(finalPos);
     }
   } // end drawSlider()
@@ -199,14 +217,15 @@ function slid3r() {
     return drawSlider;
   };
 
-  drawSlider.customTicks = function(customLabels) {
-    if (!arguments.length) return tickLabels;
-    // check to make sure we have the same number of labels as ticks
-    if (customLabels.length !== numTicks)
-      throw new Error(
-        "Make sure you're custom labels length matches the number of ticks required. (Default = 10)"
-      );
-    tickLabels = customLabels;
+  drawSlider.customTicks = function(tickLabels) {
+    if (!arguments.length) return customTicks;
+    customTicks = tickLabels;
+    return drawSlider;
+  };
+  
+  drawSlider.handleColor = function(color) {
+    if (!arguments.length) return handleColor;
+    handleColor = color;
     return drawSlider;
   };
 

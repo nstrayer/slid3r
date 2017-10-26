@@ -19,7 +19,7 @@ export const trackOverlayStyle = (selection) => selection
 .style('cursor', 'crosshair');
 
 export const handleStyle = (selection) => selection
-.style('fill', '#fff')
+// .style('fill', '#fff')
 .style('stroke', '#000')
 .style('stroke-opacity', 0.5)
 .style('strokeWidth', '1.25px');

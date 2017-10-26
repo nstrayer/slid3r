@@ -7,7 +7,7 @@
 		exports["slid3r"] = factory(require("d3"));
 	else
 		root["slid3r"] = factory(root["d3"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,15 +82,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _selectAppend = __webpack_require__(1);
 
 var _selectAppend2 = _interopRequireDefault(_selectAppend);
 
-var _styles = __webpack_require__(2);
+var _findClosestTickColor = __webpack_require__(2);
+
+var _findClosestTickColor2 = _interopRequireDefault(_findClosestTickColor);
+
+var _styles = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var d3 = __webpack_require__(3);
+var d3 = __webpack_require__(4);
 
 
 // Calculates the beta function between alpha and beta
@@ -114,16 +120,17 @@ function slid3r() {
       intClamp = true,
       // clamp handle to nearest int?
   numTicks = 10,
-      tickLabels = null,
+      customTicks = null,
       font = "optima",
+      handleColor = "white",
       vertical = false,
       transitionLength = 10;
 
   // Calculates the beta function between alpha and beta
   /**
-   * @param {object} sel - A selection from d3
-   * @return {object} - A slider
-   */
+     * @param {object} sel - A selection from d3
+     * @return {object} - A slider
+     */
   function drawSlider(sel) {
     var trans = d3.transition("sliderTrans").duration(transitionLength);
 
@@ -132,6 +139,23 @@ function slid3r() {
     var getValue = function getValue(eventX) {
       return xScale.invert(eventX);
     };
+
+    // tick logic.
+    var tickFormat = xScale.tickFormat(5, intClamp ? ",.0f" : "f");
+    var tickPositions = xScale.ticks(numTicks).map(tickFormat);
+
+    // use user custom ticks info if provided, otherwise generate with d3.
+    // check if custom ticks are just an array or are the more complex object version
+    var customTickSimple = customTicks && _typeof(customTicks[0]) !== "object";
+    var customColors = customTicks && customTicks[0].color;
+
+    var tickData = !customTicks ? tickPositions.map(function (label) {
+      return { label: label, pos: label, color: handleColor };
+    }) : customTickSimple ? customTicks.map(function (d) {
+      return { label: d, pos: d, color: handleColor };
+    }) : customTicks.map(function (d) {
+      return Object.assign({ color: handleColor }, d);
+    });
 
     var slider = sel.attr("transform", "translate(" + xPos + ", " + yPos + ")");
 
@@ -149,16 +173,7 @@ function slid3r() {
       slider.interrupt();
     }).on("start drag", dragBehavior).on("end", finishBehavior));
 
-    var handle = (0, _selectAppend2.default)(slider, "circle", ".handle").style("pointer-events", "none").attr("class", "handle").attr("r", 8).attr("cx", xScale(startPos));
-
-    var tickFormat = xScale.tickFormat(5, intClamp ? ",.0f" : "f");
-
-    var tickPositions = xScale.ticks(numTicks).map(tickFormat);
-    var tickData = tickLabels ? tickLabels.map(function (label, i) {
-      return { label: label, pos: tickPositions[i] };
-    }) : tickPositions.map(function (label) {
-      return { label: label, pos: label };
-    });
+    var handle = (0, _selectAppend2.default)(slider, "circle", ".handle").style("pointer-events", "none").attr("class", "handle").attr("r", 8).attr("fill", customColors ? (0, _findClosestTickColor2.default)(tickData, startPos) : handleColor).attr("cx", xScale(startPos));
 
     (0, _selectAppend2.default)(slider, "g", ".ticks").style("font", "10px " + font).attr("transform", "translate(0," + 18 + ")").selectAll("text").data(tickData).enter().append("text").attr("x", function (d) {
       return xScale(d.pos);
@@ -197,7 +212,8 @@ function slid3r() {
     function finishBehavior() {
       var dragPos = getValue(d3.event.x);
       var finalPos = intClamp ? Math.round(dragPos) : dragPos;
-      handle.transition(trans).attr("cx", xScale(finalPos));
+      var closestTickColor = (0, _findClosestTickColor2.default)(tickData, finalPos);
+      handle.transition(trans).attr("cx", xScale(finalPos)).attr("fill", closestTickColor);
       onDone(finalPos);
     }
   } // end drawSlider()
@@ -269,11 +285,15 @@ function slid3r() {
     return drawSlider;
   };
 
-  drawSlider.customTicks = function (customLabels) {
-    if (!arguments.length) return tickLabels;
-    // check to make sure we have the same number of labels as ticks
-    if (customLabels.length !== numTicks) throw new Error("Make sure you're custom labels length matches the number of ticks required. (Default = 10)");
-    tickLabels = customLabels;
+  drawSlider.customTicks = function (tickLabels) {
+    if (!arguments.length) return customTicks;
+    customTicks = tickLabels;
+    return drawSlider;
+  };
+
+  drawSlider.handleColor = function (color) {
+    if (!arguments.length) return handleColor;
+    handleColor = color;
     return drawSlider;
   };
 
@@ -324,6 +344,26 @@ exports.default = function (parent, type, identifier) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+exports.default = function (tickData, finalPos) {
+  var closestTick = tickData.reduce(function (closest, current, i) {
+    var distanceFromTick = Math.abs(finalPos - current.pos);
+    return distanceFromTick < closest.distance || closest.distance === null ? { distance: distanceFromTick, index: i } : closest;
+  }, { distance: null, index: -1 });
+
+  return tickData[closestTick.index].color;
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 // styles for the d3 slider
 
 // styles
@@ -344,14 +384,16 @@ var trackOverlayStyle = exports.trackOverlayStyle = function trackOverlayStyle(s
 };
 
 var handleStyle = exports.handleStyle = function handleStyle(selection) {
-  return selection.style('fill', '#fff').style('stroke', '#000').style('stroke-opacity', 0.5).style('strokeWidth', '1.25px');
+  return selection
+  // .style('fill', '#fff')
+  .style('stroke', '#000').style('stroke-opacity', 0.5).style('strokeWidth', '1.25px');
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ })
 /******/ ]);
