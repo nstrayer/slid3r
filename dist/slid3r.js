@@ -172,7 +172,6 @@ function slid3r() {
     * @return {object} - A slider
     */
     function dragBehavior() {
-      console.log('trying to drag');
       var scaledPos = getValue(d3.event.x);
       // by inverting and reverting the position we assert bounds on the slider.
       handle.attr("cx", xScale(scaledPos));
@@ -184,7 +183,6 @@ function slid3r() {
     * @return {object} - A slider
     */
     function finishBehavior() {
-      console.log('trying to drag');
       var dragPos = getValue(d3.event.x);
       var finalPos = intClamp ? Math.round(dragPos) : dragPos;
       handle.transition(trans).attr("cx", xScale(finalPos));

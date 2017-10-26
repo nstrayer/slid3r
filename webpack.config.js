@@ -5,6 +5,13 @@ module.exports = {
     libraryTarget: 'umd',
     filename: 'dist/slid3r.js',
   },
+  externals: {
+    d3 : {
+      commonjs: "d3",
+      amd: "d3",
+      root: "d3" // indicates global variable
+    }
+  },
   // devtool: 'source-map',  
   module: {
     rules: [
